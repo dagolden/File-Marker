@@ -7,13 +7,17 @@ use strict;
 use warnings;
 use Carp;
 use IO::File;
-use Scalar::Util qw( refaddr );
+use Scalar::Util qw( refaddr weaken );
 
 #--------------------------------------------------------------------------#
 # Inside-out data storage
 #--------------------------------------------------------------------------#
 
 my %MARKS = ();
+
+# Track objects for thread-safety
+
+my %REGISTRY = ();
 
 #--------------------------------------------------------------------------#
 # new()
@@ -23,6 +27,7 @@ sub new {
     my $class = shift;
     my $self = IO::File->new();
     bless $self, $class;
+    weaken( $REGISTRY{ refaddr $self } = $self );
     $self->open( @_ ) if @_;
     return $self;
 }
@@ -102,7 +107,32 @@ sub markers {
 sub DESTROY {
     my $self = shift;
     delete $MARKS{ refaddr $self };
+    delete $REGISTRY{ refaddr $self };
+
     $self->SUPER::DESTROY;
+}
+
+#--------------------------------------------------------------------------#
+# CLONE()
+#--------------------------------------------------------------------------#
+
+sub CLONE {
+    for my $old_id ( keys %REGISTRY ) {  
+       
+        # look under old_id to find the new, cloned reference
+        my $object = $REGISTRY{ $old_id };
+        my $new_id = refaddr $object;
+
+        # relocate data
+        $MARKS{ $new_id } = $MARKS{ $old_id };
+        delete $MARKS{ $old_id };
+
+        # update the weak reference to the new, cloned object
+        weaken ( $REGISTRY{ $new_id } = $REGISTRY{ $old_id } );
+        delete $REGISTRY{ $old_id };
+    }
+   
+    return;
 }
 
 #--------------------------------------------------------------------------#

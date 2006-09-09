@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+use threads;
 use Test::More tests => 9;
 use File::Spec::Functions;
 
@@ -10,8 +11,8 @@ my $expected_line;
 
 SKIP:
 {
-    skip "File::Marker doesn't support fork() on Win32 Perl < 5.7.2"
-        if $^O eq "MSWin32" && $] < 5.007002;
+    skip "File::Marker doesn't support threads on Perl < 5.7.2"
+        if $] < 5.007002;
 
     require_ok( "File::Marker" );
 
@@ -32,24 +33,23 @@ SKIP:
         "reading line 2"
     );
 
-    my $child_pid = fork;
-    if ( !$child_pid ) { # we're in the child
-        ok( $obj->goto_marker( "line2" ),
-            "jumping back to the marker for line 2"
-        );
+    my $thr = threads->new(
+        sub {
+            ok( $obj->goto_marker( "line2" ),
+                "jumping back to the marker for line 2"
+            );
 
-        is( scalar <$obj>, $expected_line,
-            "reading line 2 again"
-        );
+            is( scalar <$obj>, $expected_line,
+                "reading line 2 again"
+            );
+        }
+    );
         
-        exit;
-    }
+    # wait for thread to finish
+    $thr->join;
 
-    # wait for child to finish
-    waitpid $child_pid, 0;
-
-    # Test counter is off due to the fork
-    Test::More->builder->current_test( 7 );
+#    # Test counter is off due to the fork
+#    Test::More->builder->current_test( 7 );
 
     ok( $obj->goto_marker( "line2" ),
         "jumping back to the marker for line 2"
