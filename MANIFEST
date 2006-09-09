@@ -1,0 +1,10 @@
+MANIFEST
+README
+LICENSE
+Todo
+MANIFEST.SKIP
+t/pod-coverage.t
+t/pod.t
+Build.PL
+lib/File/Marker.pm
+t/01_File_Marker.t
