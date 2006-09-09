@@ -41,6 +41,7 @@ sub open {
     $MARKS{ refaddr $self } = {};
     $self->SUPER::open( @_ );
     $MARKS{ refaddr $self }{ 'LAST' } = $self->getpos;
+    return 1;
 }
 
 #--------------------------------------------------------------------------#
@@ -136,11 +137,11 @@ sub CLONE {
 }
 
 #--------------------------------------------------------------------------#
-# _object_count()
+# _object_count() -- used in test scripts to see if memory is leaking
 #--------------------------------------------------------------------------#
 
 sub _object_count {
-    return scalar keys %MARKS;
+    return scalar keys %REGISTRY;
 }
 
 1; #this line is important and will help the module return a true value
@@ -155,31 +156,26 @@ File::Marker - Set and jump between named position markers on a filehandle
  use File::Marker;
 
  my $fh = File::Marker->new( 'datafile.txt' );
- 
- my $first_line = <$fh>;
- 
- $fh->set_marker( 'line2' ); # mark the current position
- 
- my @rest_of_file = <$fh>;
- 
+
+ my $line1 = <$fh>;           # read a line
+ $fh->set_marker( 'line2' );  # mark the current position
+ my @rest = <$fh>;            # slurp the remainder
  $fh->goto_marker( 'line2' ); # jump back to the marked position
- 
- my $second_line = <$fh>;
+ my $line2 = <$fh>;           # read another line
 
 =head1 DESCRIPTION
 
 File::Marker allows users to set named markers for the current position in
-filehandle and then later jump back to those marked position by name.  A
+a filehandle and then later jump back to a marked position.  A
 File::Marker object is a subclass of L<IO::File>, providing full filehandle
 object functionality.
 
-File::Marker automatically sets a special marker, 'LAST', when it jumps to a
-marker, allowing an easy return to a former position.
+File::Marker automatically sets a special, reserved marker, 'LAST', when it
+jumps to a marker, allowing an easy return to a former position.
 
 This module was written as a demonstration of the inside-out object technique
-for the NY Perl Seminar group.  It is intended for teaching purposes not
-production code.  It is not currently thread-safe, including pseudo-forks on 
-Win32.
+for the NY Perl Seminar group.  It is intended for teaching purposes and has 
+not been tested in production code. 
 
 =head1 USAGE
 
@@ -194,27 +190,51 @@ IO::File.
 
 =head2 open
 
- $rv = $fh->open( @args );
+ $fh->open( FILENAME [,MODE [,PERMS]] )
+ $fh->open( FILENAME, IOLAYERS )
 
-Opens... (ref IO::File for details)
+Opens a file for use with the File::Marker object.  Arguments are passed
+directly to IO::File->open().  See IO::File for details.  Returns true if
+successful and dies on failure.
 
 =head2 set_marker
 
- $rv = set_marker();
+ $fh->set_marker( $marker_name );
 
-Description of set_marker...
+Creates a named marker corresponding to the current position in the file.
+Dies if the filehandle is closed, if the position cannot be determined, or
+if the reserved marker name 'LAST' is used.  Using the same name as an
+existing marker will overwrite the existing marker position.
 
 =head2 goto_marker
 
- $rv = goto_marker();
+ $fh->goto_marker( $marker_name );
 
-Description of goto_marker...
+Seeks to the position in the file corresponding to the given marker name.
+Dies if the filehandle is closed, if the marker name is unknown, or if the
+seek fails.  
+
+The reserved marker name 'LAST' corresponds to the location in the file prior
+to the most recent call to goto_marker on the object. For example:
+ 
+ # starts at location X in the file
+ $fh->goto_marker( 'one' );  # seek to location Y marked by 'one'
+ $fh->goto_marker( 'LAST' ); # seek back to X
+ $fh->goto_marker( 'LAST' ); # seek back to Y
+
+If there have been no prior calls to goto_marker, 'LAST' will seek to the 
+beginning of the file.
 
 =head2 markers
 
  @list = $fh->markers();
 
-Returns a list of markers that have been set on the object.  (Including 'LAST'.)
+Returns a list of markers that have been set on the object, including 'LAST'.
+
+=head1 LIMITATIONS
+
+As with all inside-out objects, File::Marker is only thread-safe (including
+Win32 pseudo-forks) for Perl 5.8 or better, which supports the CLONE subroutine.
 
 =head1 BUGS
 
