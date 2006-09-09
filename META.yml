@@ -9,9 +9,10 @@ resources:
   license: http://dev.perl.org/licenses/
 requires:
   File::Spec::Functions: 0
+  File::Temp: 0.14
   IO::File: 0
   Scalar::Util: 1.09
-  Test::More: 0.48
+  Test::More: 0.47
 provides:
   File::Marker:
     file: lib/File/Marker.pm

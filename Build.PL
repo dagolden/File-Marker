@@ -10,7 +10,7 @@ Module::Build->new(
     requires        => {
         Scalar::Util => 1.09,
         File::Spec::Functions => 0,
-        File::Temp => 0.15, # OO w bug fixes
+        File::Temp => 0.14, # Object-oriented 
         IO::File => 0,
         Test::More => 0.47,
     },

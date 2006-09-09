@@ -8,9 +8,10 @@ WriteMakefile
           'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/File/Marker.pm',
           'PREREQ_PM' => {
-                           'Test::More' => '0.48',
+                           'Test::More' => '0.47',
                            'Scalar::Util' => '1.09',
                            'IO::File' => 0,
+                           'File::Temp' => '0.14',
                            'File::Spec::Functions' => 0
                          }
         )

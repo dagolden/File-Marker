@@ -19,7 +19,7 @@ my $savefilename = $savefile->filename;
 require_ok( 'File::Marker' ); 
 
 ok( my $obj = File::Marker->new (),
-    "Creating new File::Marker object"
+    "creating new File::Marker object"
 );
 
 ok( $obj->open( $filename, "<" ), 
@@ -38,7 +38,7 @@ while ( ! $obj->eof ) {
 #--------------------------------------------------------------------------#
 
 ok( $obj->save_markers( $savefilename ),
-    "Saving to $savefilename"
+    "saving markers to $savefilename"
 );
 
 #--------------------------------------------------------------------------#
@@ -50,7 +50,7 @@ ok( $obj->open( $filename, "<" ),
 );
 
 ok( $obj->load_markers( $savefilename ),
-    "Loading markers from $savefilename"
+    "loading markers from $savefilename"
 );
 
 for my $mark ( sort $obj->markers ) {
