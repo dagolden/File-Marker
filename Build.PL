@@ -8,9 +8,9 @@ Module::Build->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires        => {
-        # module requirements here
-    },
-    build_requires  => { 
+        Scalar::Util => 1.09,
+        File::Spec::Functions => 0,
+        IO::File => 0,
         Test::More => 0.48,
     },
 )->create_build_script;

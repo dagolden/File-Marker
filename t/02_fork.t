@@ -1,6 +1,17 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Config;
+
+BEGIN {
+    if ( $^O eq 'MSWin32' and ! $Config{useithreads} ) {
+        require Test::More;
+        Test::More::plan( 
+            skip_all => "Pseudo-fork emulation not available for this Perl" 
+        );
+    }
+}
+        
 
 use Test::More tests => 9;
 use File::Spec::Functions;

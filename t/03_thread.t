@@ -1,7 +1,17 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Config;
 
+BEGIN {
+    if ( ! $Config{useithreads} ) {
+        require Test::More;
+        Test::More::plan( 
+            skip_all => "Threads not available for this Perl" 
+        );
+    }
+}
+        
 use threads;
 use Test::More tests => 9;
 use File::Spec::Functions;
