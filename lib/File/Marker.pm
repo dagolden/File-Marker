@@ -9,76 +9,38 @@ use Carp;
 use IO::File;
 use Scalar::Util qw( refaddr );
 
+#--------------------------------------------------------------------------#
+# Inside-out data storage
+#--------------------------------------------------------------------------#
+
 my %marks_for = ();
 
 #--------------------------------------------------------------------------#
-# main pod documentation 
+# new()
 #--------------------------------------------------------------------------#
-
-# Below is the stub of documentation for your module. You better edit it!
-
-=head1 NAME
-
-File::Marker - Put abstract here 
-
-=head1 SYNOPSIS
-
- use File::Marker;
- blah blah blah
-
-=head1 DESCRIPTION
-
-Description...
-
-=head1 USAGE
-
-Usage...
-
-=head2 new
-
-=cut
 
 sub new {
     my $class = shift;
-    
     my $self = IO::File->new();
     bless $self, $class;
     $self->open( @_ ) if @_;
     return $self;
 }
 
-
 #--------------------------------------------------------------------------#
 # open()
 #--------------------------------------------------------------------------#
-
-=head2 open
-
- $rv = open();
-
-Description of open...
-
-=cut
 
 sub open {
     my $self = shift;
     $marks_for{ refaddr $self } = {};
     $self->SUPER::open( @_ );
-    $marks_for{ refaddr $self }{'LAST'} = $self->getpos;
+    $marks_for{ refaddr $self }{ 'LAST' } = $self->getpos;
 }
-
 
 #--------------------------------------------------------------------------#
 # set_marker()
 #--------------------------------------------------------------------------#
-
-=head2 set_marker
-
- $rv = set_marker();
-
-Description of set_marker...
-
-=cut
 
 sub set_marker {
     my ($self, $mark) = @_;
@@ -90,10 +52,11 @@ sub set_marker {
         if $mark eq 'LAST';
         
     my $position = $self->getpos;
+
     croak "Couldn't set marker '$mark': couldn't locate position in file"
         if ! defined $position;
     
-    $marks_for{ refaddr $self }{$mark} = $self->getpos;
+    $marks_for{ refaddr $self }{ $mark } = $self->getpos;
     
     return 1;
 }
@@ -101,14 +64,6 @@ sub set_marker {
 #--------------------------------------------------------------------------#
 # goto_marker()
 #--------------------------------------------------------------------------#
-
-=head2 goto_marker
-
- $rv = goto_marker();
-
-Description of goto_marker...
-
-=cut
 
 sub goto_marker {
     my ($self, $mark) = @_;
@@ -121,7 +76,8 @@ sub goto_marker {
     
     my $old_position = $self->getpos; # save for LAST
     
-    my $rc = $self->setpos( $marks_for{refaddr $self}{$mark} );
+    my $rc = $self->setpos( $marks_for{ refaddr $self }{ $mark } );
+    
     croak "Couldn't goto marker '$mark': could not seek to location in file"
         if ! defined $rc;
     
@@ -130,32 +86,91 @@ sub goto_marker {
     return 1;
 }
 
-
 #--------------------------------------------------------------------------#
 # markers()
 #--------------------------------------------------------------------------#
-
-=head2 markers
-
- $rv = markers();
-
-Description of markers...
-
-=cut
 
 sub markers {
     my $self = shift;
     return keys %{ $marks_for{ refaddr $self } };
 }
 
-
-
 1; #this line is important and will help the module return a true value
 __END__
 
+=head1 NAME
+
+File::Marker - Set and jump between named position markers on a filehandle
+
+=head1 SYNOPSIS
+
+ use File::Marker;
+
+ my $fh = File::Marker->new( 'datafile.txt' );
+ 
+ my $first_line = <$fh>;
+ 
+ $fh->set_marker( 'line2' ); # mark the current position
+ 
+ my @rest_of_file = <$fh>;
+ 
+ $fh->goto_marker( 'line2' ); # jump back to the marked position
+ 
+ my $second_line = <$fh>;
+
+=head1 DESCRIPTION
+
+File::Marker allows users to set named markers for the current position in
+filehandle and then later jump back to those marked position by name.  A
+File::Marker object is a subclass of L<IO::File>, providing full filehandle
+object functionality.
+
+File::Marker automatically sets a special marker, 'LAST', when it jumps to a
+marker, allowing an easy return to a former position.
+
+This module was written as a demonstration of the inside-out object technique
+for the NY Perl Seminar group.  It is intended for teaching purposes not
+production code.  It is not currently thread-safe, including pseudo-forks on 
+Win32.
+
+=head1 USAGE
+
+=head2 new
+ 
+ my $fh = new();
+ my $fh = new( @args );
+
+Creates and returns a File::Marker object.  If arguments are provided, they are
+passed to open() before the object is returned.  This mimics the behavior of
+IO::File.
+
+=head2 open
+
+ $rv = $fh->open( @args );
+
+Opens... (ref IO::File for details)
+
+=head2 set_marker
+
+ $rv = set_marker();
+
+Description of set_marker...
+
+=head2 goto_marker
+
+ $rv = goto_marker();
+
+Description of goto_marker...
+
+=head2 markers
+
+ @list = $fh->markers();
+
+Returns a list of markers that have been set on the object.  (Including 'LAST'.)
+
 =head1 BUGS
 
-Please report bugs using the CPAN Request Tracker at L<http://rt.cpan.org/>
+Please report bugs to the author.
 
 =head1 AUTHOR
 
@@ -174,6 +189,5 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
-
 
 =cut
