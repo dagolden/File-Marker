@@ -1,6 +1,6 @@
 package File::Marker;
 
-$VERSION = "0.10";
+$VERSION = "0.11";
 @ISA = qw( IO::File );
 
 use strict;
@@ -99,6 +99,45 @@ sub goto_marker {
 sub markers {
     my $self = shift;
     return keys %{ $MARKS{ refaddr $self } };
+}
+
+#--------------------------------------------------------------------------#
+# save_markers()
+#--------------------------------------------------------------------------#
+
+sub save_markers {
+    my ( $self, $filename ) = @_;
+    my $outfile = IO::File->new( $filename, "w" )
+        or croak "Couldn't open $filename for writing";
+    $outfile->binmode;
+    my $markers = $MARKS{ refaddr $self };
+    for my $mark ( keys %$markers ) {
+        next if $mark eq 'LAST';
+        print $outfile "$mark\n";
+        print $outfile unpack("H*",$markers->{$mark}), "\n";
+    }
+    close $outfile;
+}
+
+#--------------------------------------------------------------------------#
+# load_markers()
+#--------------------------------------------------------------------------#
+
+sub load_markers {
+    my ( $self, $filename ) = @_;
+    my $infile = IO::File->new( $filename, "r" )
+        or croak "Couldn't open $filename for reading";
+    $infile->binmode;
+    my $markers = $MARKS{ refaddr $self };
+    my $mark;
+    while ( defined( $mark = <$infile>) ) {
+        chomp $mark;
+        my $position = <$infile>;
+        chomp $position;
+        $position = pack("H*",$position);
+        $markers->{$mark} = $position;
+    }
+    close $infile;
 }
 
 #--------------------------------------------------------------------------#
@@ -230,6 +269,19 @@ beginning of the file.
  @list = $fh->markers();
 
 Returns a list of markers that have been set on the object, including 'LAST'.
+
+=head2 save_markers
+
+ $fh->save_markers( $marker_filename );
+
+Saves the current list of markers (excluding 'LAST') to the given filename.
+
+=head2 load_markers
+
+ $fh = File::Marker->new( 'datafile.txt' );
+ $fh->load_markers( $marker_filename );
+
+Loads markers from a previously-saved external file.  Will overwrite any
 
 =head1 LIMITATIONS
 
