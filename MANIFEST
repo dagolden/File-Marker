@@ -1,5 +1,6 @@
 Build.PL
 Changes
+INSTALL
 lib/File/Marker.pm
 LICENSE
 Makefile.PL
@@ -11,5 +12,7 @@ t/01_File_Marker.t
 t/02_fork.t
 t/03_thread.t
 t/04_save_load.t
+t/98_pod.t
+t/99_pod_coverage.t
 t/testdata.txt
 Todo

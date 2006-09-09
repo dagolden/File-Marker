@@ -1,6 +1,6 @@
 package File::Marker;
 
-$VERSION = "0.11";
+$VERSION = "0.12";
 @ISA = qw( IO::File );
 
 use strict;
@@ -288,7 +288,13 @@ Win32 pseudo-forks) for Perl 5.8 or better, which supports the CLONE subroutine.
 
 =head1 BUGS
 
-Please report bugs to the author.
+Please report bugs or feature requests using the CPAN Request Tracker.
+Bugs can be sent by email to C<<< bug-File-Marker@rt.cpan.org >>> or
+submitted using the web interface at
+L<http://rt.cpan.org/Public/Dist/Display.html?Name=File-Marker>
+
+When submitting a bug or request, please include a test-file or a patch to an
+existing test-file that illustrates the bug or desired feature.
 
 =head1 AUTHOR
 
@@ -298,14 +304,38 @@ dagolden@cpan.org
 
 http://dagolden.com/
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2005 by David A. Golden
+Copyright (c) 2005, 2006 by David A. Golden
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+This program is free software; you can redistribute it andE<sol>or modify it under
+the same terms as Perl itself.
 
-The full text of the license can be found in the
-LICENSE file included with this module.
+The full text of the license can be found in the LICENSE file included with
+this module.
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS ANDE<sol>OR OTHER PARTIES
+PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY ANDE<sol>OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 =cut
+

@@ -1,5 +1,9 @@
 Revision history for Perl module File::Marker
 
+0.12 Wed Jul 19 23:04:46 EDT 2006
+    - Updated Pod
+    - added optional pod/coverage tests
+
 0.11 Fri May 12 17:50:39 EDT 2006
     - added ability to save/load markers
 
