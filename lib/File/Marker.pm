@@ -129,7 +129,7 @@ sub CLONE {
         delete $MARKS{ $old_id };
 
         # update the weak reference to the new, cloned object
-        weaken ( $REGISTRY{ $new_id } = $REGISTRY{ $old_id } );
+        weaken ( $REGISTRY{ $new_id } = $object );
         delete $REGISTRY{ $old_id };
     }
    
