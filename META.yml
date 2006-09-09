@@ -1,0 +1,19 @@
+---
+name: File-Marker
+version: 0.10
+author:
+  - David A. Golden <dagolden@cpan.org>
+abstract: Set and jump between named position markers on a filehandle
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  File::Spec::Functions: 0
+  IO::File: 0
+  Scalar::Util: 1.09
+  Test::More: 0.48
+provides:
+  File::Marker:
+    file: lib/File/Marker.pm
+    version: 0.10
+generated_by: Module::Build version 0.2703
