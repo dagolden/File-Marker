@@ -5,7 +5,7 @@ use File::Spec::Functions;
 
 my $filename = catfile('t', 'testdata.txt');
 
-BEGIN { use_ok( 'File::Marker' ); }
+require_ok( 'File::Marker' ); 
 
 my $obj = File::Marker->new ();
 isa_ok ($obj, 'File::Marker');
