@@ -1,6 +1,6 @@
 ---
 name: File-Marker
-version: 0.10
+version: 0.11
 author:
   - David A. Golden <dagolden@cpan.org>
 abstract: Set and jump between named position markers on a filehandle
@@ -15,5 +15,8 @@ requires:
 provides:
   File::Marker:
     file: lib/File/Marker.pm
-    version: 0.10
-generated_by: Module::Build version 0.2703
+    version: 0.11
+generated_by: Module::Build version 0.28
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

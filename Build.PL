@@ -10,7 +10,8 @@ Module::Build->new(
     requires        => {
         Scalar::Util => 1.09,
         File::Spec::Functions => 0,
+        File::Temp => 0.15, # OO w bug fixes
         IO::File => 0,
-        Test::More => 0.48,
+        Test::More => 0.47,
     },
 )->create_build_script;

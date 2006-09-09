@@ -2,13 +2,14 @@ Build.PL
 Changes
 lib/File/Marker.pm
 LICENSE
+Makefile.PL
 MANIFEST
 MANIFEST.SKIP
+META.yml
 README
 t/01_File_Marker.t
 t/02_fork.t
 t/03_thread.t
+t/04_save_load.t
 t/testdata.txt
 Todo
-Makefile.PL
-META.yml

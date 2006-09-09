@@ -28,7 +28,6 @@ DESCRIPTION
 
 USAGE
   new
-
      my $fh = new();
      my $fh = new( @args );
 
@@ -37,7 +36,6 @@ USAGE
     behavior of IO::File.
 
   open
-
      $fh->open( FILENAME [,MODE [,PERMS]] )
      $fh->open( FILENAME, IOLAYERS )
 
@@ -46,7 +44,6 @@ USAGE
     successful and dies on failure.
 
   set_marker
-
      $fh->set_marker( $marker_name );
 
     Creates a named marker corresponding to the current position in the
@@ -56,7 +53,6 @@ USAGE
     position.
 
   goto_marker
-
      $fh->goto_marker( $marker_name );
 
     Seeks to the position in the file corresponding to the given marker
@@ -75,11 +71,22 @@ USAGE
     the beginning of the file.
 
   markers
-
      @list = $fh->markers();
 
     Returns a list of markers that have been set on the object, including
     'LAST'.
+
+  save_markers
+     $fh->save_markers( $marker_filename );
+
+    Saves the current list of markers (excluding 'LAST') to the given
+    filename.
+
+  load_markers
+     $fh = File::Marker->new( 'datafile.txt' );
+     $fh->load_markers( $marker_filename );
+
+    Loads markers from a previously-saved external file. Will overwrite any
 
 LIMITATIONS
     As with all inside-out objects, File::Marker is only thread-safe
