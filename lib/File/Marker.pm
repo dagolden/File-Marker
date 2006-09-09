@@ -109,7 +109,6 @@ sub save_markers {
     my ( $self, $filename ) = @_;
     my $outfile = IO::File->new( $filename, "w" )
         or croak "Couldn't open $filename for writing";
-    $outfile->binmode;
     my $markers = $MARKS{ refaddr $self };
     for my $mark ( keys %$markers ) {
         next if $mark eq 'LAST';
@@ -127,7 +126,6 @@ sub load_markers {
     my ( $self, $filename ) = @_;
     my $infile = IO::File->new( $filename, "r" )
         or croak "Couldn't open $filename for reading";
-    $infile->binmode;
     my $markers = $MARKS{ refaddr $self };
     my $mark;
     while ( defined( $mark = <$infile>) ) {
