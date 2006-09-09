@@ -143,3 +143,11 @@ eval { $obj->goto_marker('LAST') };
 like( $@, qr/closed/,
     "got error trying to goto marker for closed filehandle"
 );
+
+#--------------------------------------------------------------------------#
+# no memory leaks
+#--------------------------------------------------------------------------#
+
+is( File::Marker->_object_count, 1,
+    "Confirm only one object in memory storage (no leaks)"
+);

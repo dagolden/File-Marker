@@ -13,7 +13,7 @@ use Scalar::Util qw( refaddr );
 # Inside-out data storage
 #--------------------------------------------------------------------------#
 
-my %marks_for = ();
+my %MARKS = ();
 
 #--------------------------------------------------------------------------#
 # new()
@@ -33,9 +33,9 @@ sub new {
 
 sub open {
     my $self = shift;
-    $marks_for{ refaddr $self } = {};
+    $MARKS{ refaddr $self } = {};
     $self->SUPER::open( @_ );
-    $marks_for{ refaddr $self }{ 'LAST' } = $self->getpos;
+    $MARKS{ refaddr $self }{ 'LAST' } = $self->getpos;
 }
 
 #--------------------------------------------------------------------------#
@@ -56,7 +56,7 @@ sub set_marker {
     croak "Couldn't set marker '$mark': couldn't locate position in file"
         if ! defined $position;
     
-    $marks_for{ refaddr $self }{ $mark } = $self->getpos;
+    $MARKS{ refaddr $self }{ $mark } = $self->getpos;
     
     return 1;
 }
@@ -72,16 +72,16 @@ sub goto_marker {
         if ! $self->opened;
 
     croak "Unknown file marker '$mark'"
-        if ! exists $marks_for{refaddr $self}{$mark};
+        if ! exists $MARKS{refaddr $self}{$mark};
     
     my $old_position = $self->getpos; # save for LAST
     
-    my $rc = $self->setpos( $marks_for{ refaddr $self }{ $mark } );
+    my $rc = $self->setpos( $MARKS{ refaddr $self }{ $mark } );
     
     croak "Couldn't goto marker '$mark': could not seek to location in file"
         if ! defined $rc;
     
-    $marks_for{ refaddr $self }{ 'LAST' } = $old_position;
+    $MARKS{ refaddr $self }{ 'LAST' } = $old_position;
 
     return 1;
 }
@@ -92,7 +92,25 @@ sub goto_marker {
 
 sub markers {
     my $self = shift;
-    return keys %{ $marks_for{ refaddr $self } };
+    return keys %{ $MARKS{ refaddr $self } };
+}
+
+#--------------------------------------------------------------------------#
+# DESTROY()
+#--------------------------------------------------------------------------#
+
+sub DESTROY {
+    my $self = shift;
+    delete $MARKS{ refaddr $self };
+    $self->SUPER::DESTROY;
+}
+
+#--------------------------------------------------------------------------#
+# _object_count()
+#--------------------------------------------------------------------------#
+
+sub _object_count {
+    return scalar keys %MARKS;
 }
 
 1; #this line is important and will help the module return a true value
