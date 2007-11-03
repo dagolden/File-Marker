@@ -188,6 +188,10 @@ __END__
 
 File::Marker - Set and jump between named position markers on a filehandle
 
+=head1 VERSION
+
+This documentation refers to version 0.13.
+
 =head1 SYNOPSIS
 
  use File::Marker;
