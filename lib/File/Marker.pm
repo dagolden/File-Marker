@@ -1,6 +1,6 @@
 package File::Marker;
 
-$VERSION = "0.12";
+$VERSION = '0.13';
 @ISA = qw( IO::File );
 
 use strict;

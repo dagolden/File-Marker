@@ -1,5 +1,8 @@
 Revision history for Perl module File::Marker
 
+0.13 Sat Nov  3 00:15:48 EDT 2007
+    - Fixed badly formatted META.yml
+
 0.12 Wed Jul 19 23:04:46 EDT 2006
     - Updated Pod
     - added optional pod/coverage tests

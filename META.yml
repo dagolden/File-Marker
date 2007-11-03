@@ -1,10 +1,6 @@
 ---
 name: File-Marker
-version: !!perl/hash:Module::Build::Version
-  original: 0.12
-  version:
-    - 0
-    - 120
+version: 0.13
 author:
   - 'David A. Golden <dagolden@cpan.org>'
 abstract: Set and jump between named position markers on a filehandle
@@ -20,8 +16,8 @@ requires:
 provides:
   File::Marker:
     file: lib/File/Marker.pm
-    version: 0.12
-generated_by: Module::Build version 0.2804
+    version: 0.13
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
