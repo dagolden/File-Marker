@@ -2,6 +2,9 @@ Revision history for Perl module File::Marker
 
 {{$NEXT}}
 
+    - Updated distribution metadata
+    - Switched to managing distribution with Dist::Zilla
+
 0.13 Sat Nov  3 00:15:48 EDT 2007
 
     - Fixed badly formatted META.yml
