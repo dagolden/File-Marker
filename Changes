@@ -2,6 +2,8 @@ Revision history for Perl module File::Marker
 
 {{$NEXT}}
 
+0.14      2013-12-19 15:22:29 America/New_York
+
     - Updated distribution metadata
     - Switched to managing distribution with Dist::Zilla
 
